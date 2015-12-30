@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -41,8 +42,8 @@ public class SpringConfig {
         ResourceDatabasePopulator databasePopulator =
                 new ResourceDatabasePopulator();
 
-        databasePopulator.addScript(dropReopsitoryTables);
-        databasePopulator.addScript(dataReopsitorySchema);
+        //databasePopulator.addScript(dropReopsitoryTables);
+        //databasePopulator.addScript(dataReopsitorySchema);
         databasePopulator.setIgnoreFailedDrops(true);
 
         DataSourceInitializer initializer = new DataSourceInitializer();
@@ -67,6 +68,7 @@ public class SpringConfig {
     public JobLauncher getJobLauncher() throws Exception {
         SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
         jobLauncher.setJobRepository(getJobRepository());
+        jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
         jobLauncher.afterPropertiesSet();
         return jobLauncher;
     }

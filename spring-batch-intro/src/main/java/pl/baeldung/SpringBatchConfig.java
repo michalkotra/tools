@@ -26,9 +26,6 @@ import java.net.MalformedURLException;
 public class SpringBatchConfig {
 
     @Autowired
-    private JobBuilderFactory jobs;
-
-    @Autowired
     private StepBuilderFactory steps;
 
     @Value("input/record.csv")
@@ -80,12 +77,6 @@ public class SpringBatchConfig {
     protected Step step1(ItemReader<Transaction> reader,
                          ItemProcessor<Transaction, Transaction> processor,
                          ItemWriter<Transaction> writer) {
-        return steps.get("step1").<Transaction, Transaction> chunk(10)
-                .reader(reader).processor(processor).writer(writer).build();
-    }
-
-    @Bean(name = "firstBatchJob")
-    public Job job(@Qualifier("step1") Step step1) {
-        return jobs.get("firstBatchJob").start(step1).build();
+        return steps.get("step1").<Transaction, Transaction> chunk(10).reader(reader).processor(processor).writer(writer).build();
     }
 }
